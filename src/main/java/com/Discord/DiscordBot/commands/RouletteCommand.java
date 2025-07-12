@@ -34,13 +34,21 @@ public class RouletteCommand {
         return chamber;
     }
 
+    private static boolean[] initialChamber() {
+        boolean[] chamber = new boolean[6];
+        int bulletPos = random.nextInt(5)+1;
+        chamber[bulletPos] = true;
+        return chamber;
+    }
+
+
     // Spin resets chambers with bullet in random spot
     private static void spinChamber(String userId, User user) {
         boolean[] chamber = newChamber();
         chambers.put(userId, chamber);
 
-        // Call the logger here
-        printChamber(user, chamber);
+        // Call the logger here if you want
+        //printChamber(user, chamber);
     }
 
     // Shift chambers: remove chamber[0], shift left, append removed chamber to end
@@ -56,14 +64,14 @@ public class RouletteCommand {
     public static void execute(SlashCommandInteractionEvent event) {
         String userId = event.getUser().getId();
 
-        chambers.put(userId, newChamber());
+        chambers.put(userId, initialChamber());
         surviveCount.put(userId, 0);  // reset survive count when new game starts
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Sigma Roulette")
                 .setDescription(event.getUser().getAsMention() + ", you've loaded the toilet.\n\n**Rules:**\n" +
-                        "- If you get a **Chicken Jockey** <:chickenjockey:1391619109308862625> when you flush, you're safe!\n" +
-                        "- If you get a **Skibidi Toilet** <:skibiditoilet:1391619088970944522> you lose.\n" +
+                        "- If you get a **Chicken Jockey** <:chickenjockey:1389470392128639007> when you flush, you're safe!\n" +
+                        "- If you get a **Skibidi Toilet** <:SKIBIDITOILET:1389472754490671145> you lose.\n" +
                         "- You can choose to spin or flush the toilet.\n" +
                         "Good luck!")
                 .setColor(Color.ORANGE);
@@ -102,7 +110,7 @@ public class RouletteCommand {
                 spinChamber(userId, user);//also prints the chamber to me
 
                 EmbedBuilder embed = new EmbedBuilder()
-                        .setTitle("<:chickenjockey:1391619109308862625> Sigma Roulette <:skibiditoilet:1391619088970944522> - Toilet Spun")
+                        .setTitle("<:chickenjockey:1389470392128639007> Sigma Roulette <:SKIBIDITOILET:1389472754490671145> - Toilet Spun")
                         .setDescription(user.getAsMention() + " spun the toilet. Good luck!")
                         .addField("Times survived", String.valueOf(currentSurvive), false)
                         .setColor(Color.CYAN);
@@ -133,7 +141,7 @@ public class RouletteCommand {
                     surviveCount.remove(userId);
 
                     EmbedBuilder embed = new EmbedBuilder()
-                            .setTitle("<:skibiditoilet:1391619088970944522> SKIBIDI SIGMA TOILET! You lost!")
+                            .setTitle("<:SKIBIDITOILET:1389472754490671145> SKIBIDI SIGMA TOILET! You lost!")
                             .setDescription(user.getAsMention() + " flushed the toilet and got flushed down! Game over.")
                             .addField("Total rounds survived", String.valueOf(currentSurvive), false)
                             .setColor(Color.RED);
@@ -148,8 +156,8 @@ public class RouletteCommand {
                     rotateChamber(userId);
 
                     EmbedBuilder embed = new EmbedBuilder()
-                            .setTitle("<:chickenjockey:1391619109308862625> CHICKEN JOCKEY!!! You're safe!")
-                            .setDescription(user.getAsMention() + " flushed the toilet and and out came a chicken jockey <:chickenjockey:1391619109308862625>. Safe!")
+                            .setTitle("<:chickenjockey:1389470392128639007> CHICKEN JOCKEY!!! You're safe!")
+                            .setDescription(user.getAsMention() + " flushed the toilet and and out came a chicken jockey <:chickenjockey:1389470392128639007>. Safe!")
                             .addField("Times survived", String.valueOf(currentSurvive), false)
                             .setColor(Color.GREEN);
 
@@ -172,4 +180,5 @@ public class RouletteCommand {
         }
         System.out.println("]");
     }
+
 }
