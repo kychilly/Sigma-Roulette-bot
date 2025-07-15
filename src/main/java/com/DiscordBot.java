@@ -33,8 +33,10 @@ public class DiscordBot {
         shardManager = builder.build();
 
         // Register event listeners
-        shardManager.addEventListener(new CommandManager());
-        shardManager.addEventListener(new RouletteButtonListener());
+        shardManager.addEventListener(
+            new CommandManager(),
+            new RouletteButtonListener()
+        );
 
     }
 
